@@ -23,4 +23,30 @@ router.route('/add').post((req, res) =>{
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/:id').get((req, res)=>{
+    Playlist.findById(req.params.id)
+    .then(playlist => res.json(playlist))
+    .catch(err => res.status(400).json('Error ' + err));
+});
+
+router.route('/:id').delete((req, res) =>{
+    Playlist.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Exercise deleted.'))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/update/:id').post((req, res) =>{
+    Playlist.findById(req.params.id)
+    .then(playlist => {
+        playlist.url = req.body.url;
+        playlist.playlistName = req.body.playlistName;
+        playlist.description = req.body.description;
+
+        playlist.save()
+        .then(()=> res.json('Exercise updated'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error ' + err));
+});
+
 module.exports = router;
