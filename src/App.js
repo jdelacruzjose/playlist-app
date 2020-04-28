@@ -8,17 +8,20 @@ import PlaylistList from './components/playlist-list.component';
 import EditPlaylist from './components/edit-playlist.component';
 import AddPlaylist from './components/add-playlist.component';
 import EditUser from './components/edit-user.component';
+import Footer from './components/footer.component';
 
 
 function App() {
   return (
     <Router>
       <Navbar />
-      <br/>
+      <br />
       <Route path= '/' exact component ={PlaylistList} />
       <Route path= '/edit/:id' component ={EditPlaylist} />
       <Route path= '/add' component ={AddPlaylist} />
       <Route path= '/user' component ={EditUser} />
+      <br />
+      <Footer />
     </Router> 
   );
 }
