@@ -14,14 +14,16 @@ import Footer from './components/footer.component';
 function App() {
   return (
     <Router>
-      <Navbar />
-      <br />
-      <Route path= '/' exact component ={PlaylistList} />
-      <Route path= '/edit/:id' component ={EditPlaylist} />
-      <Route path= '/add' component ={AddPlaylist} />
-      <Route path= '/user' component ={EditUser} />
-      <br />
-      <Footer />
+      <div className= 'container'>
+        <Navbar />
+        <br />
+        <Route path= '/' exact component ={PlaylistList} />
+        <Route path= '/edit/:id' component ={EditPlaylist} />
+        <Route path= '/add' component ={AddPlaylist} />
+        <Route path= '/user' component ={EditUser} />
+        <br />
+        <Footer />
+      </div>
     </Router> 
   );
 }

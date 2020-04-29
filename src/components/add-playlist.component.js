@@ -54,30 +54,42 @@ export default class AddPlaylist extends Component {
         window.location = '/';
     }
 
-    render(){
-        return(
+render() {
+        return (
         <div>
             <h3>Test Playlist</h3>
-            {/* <form onSubmit ={this.onSubmit}>
+            <form onSubmit ={this.onSubmit}>
                 <div className= 'form-group'>
-                    <label>Username:</label>
-                    <select ref='userInput'
-                    required
+                    <label>Playlist Name: </label>
+                    <input 
                     className= 'form-control'
                     value= {this.state.playlistName}
-                    onChange= {this.onChangePlaylistName}>
-                    {
-                        this.state.users.map(function(user){
-                            return <option
-                            key= {user}
-                            value= {user}>{user}
-                            >    
-                            </option>;
-                        })   
-                    }    
-                    </select>
-                </div> */}
+                    onChange= {this.onChangePlaylistName} />
+                </div>
+                <div className= 'form-group'>
+                    <label>Description: </label>
+                    <input type= 'text'
+                    required
+                    className= 'form-control'
+                    value= {this.state.description}
+                    onChange= {this.onChangeDescription} />
+                </div>
+                <div className= 'form-group'>
+                    <label>Playlist URL: </label>
+                    <input type= 'text'
+                    required
+                    className= 'form-control'
+                    value= {this.state.url}
+                    onChange= {this.onChangeUrl} />
+                </div>
+
+                <div>
+                    <input type= 'submit' 
+                    value='Submit' 
+                    className= 'btn btn-primary' />
+                </div>   
+            </form>   
         </div>
-        )
-    }
-}
+        )       
+     }
+ }
