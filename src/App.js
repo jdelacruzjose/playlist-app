@@ -7,7 +7,7 @@ import Navbar from './components/navbar.component';
 import PlaylistList from './components/playlist-list.component';
 import EditPlaylist from './components/edit-playlist.component';
 import AddPlaylist from './components/add-playlist.component';
-import EditUser from './components/edit-user.component';
+import CreateUser from './components/create-user.component';
 import Footer from './components/footer.component';
 
 
@@ -20,7 +20,7 @@ function App() {
         <Route path= '/' exact component ={PlaylistList} />
         <Route path= '/edit/:id' component ={EditPlaylist} />
         <Route path= '/add' component ={AddPlaylist} />
-        <Route path= '/user' component ={EditUser} />
+        <Route path= '/user' component ={CreateUser} />
         <br />
         <Footer />
       </div>
