@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class AddPlaylist extends Component {
     constructor(props) {
@@ -18,9 +19,14 @@ export default class AddPlaylist extends Component {
     }
 
     componentDidMount(){
-        this.setState({
-            users: ['test user'],
-            username: 'test user'    
+        axios.get('http://localhost:5000/users/')
+        .then(response => {
+             if (response.data.length > 0){
+                this.setState({
+                    user: response.data.map(user => user.username),
+                    username: response.data[0].username
+                })    
+             }
         })
     }
 
@@ -51,6 +57,10 @@ export default class AddPlaylist extends Component {
         }
 
         console.log(exercise);
+
+        axios.post('http://localhosr:5000/playlist/add', exercise)
+            .then(res => console.log(res.data));
+
         window.location = '/';
     }
 
