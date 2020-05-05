@@ -50,15 +50,15 @@ export default class AddPlaylist extends Component {
     onSubmit(e){
         e.preventDefault();
 
-        const exercise = {
+        const playlist = {
             url: this.state.url,
             playlistName: this.state.playlistName,
             description: this.state.description
         }
 
-        console.log(exercise);
+        console.log(playlist);
 
-        axios.post('http://localhosr:5000/playlist/add', exercise)
+        axios.post('http://localhost:5000/playlist/add', playlist)
             .then(res => console.log(res.data));
 
         window.location = '/';

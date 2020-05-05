@@ -27,7 +27,6 @@ export default class CreateUser extends Component {
         
         const user = {
             username: this.state.username
- 
         }
 
         console.log(user);
