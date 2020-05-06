@@ -25,6 +25,8 @@ const playlistRoutes = require('./routes/playlist-routes');
 app.use('/users', userRoutes);
 app.use('/playlist', playlistRoutes);
 
+
+
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
