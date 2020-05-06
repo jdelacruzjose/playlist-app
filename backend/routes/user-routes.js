@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/user.model');
+const bcrypt = require('bcrypt');
 
 router.route('/').get((req, res) =>{
     User.find()
@@ -18,16 +19,41 @@ router.route('/add').post((req, res) => {
     const gender = req.body.gender;
     const followers = req.body.followers;
 
+    if(!username || !password){
+        res.status(400).json({ message: 'Provide username and password'});
+        return;
+    }
+
+    if(password.length < 3){
+        res.json(400).json({
+            message: 'Please be sure your password is at least 3 characters long'});
+        return;
+    }
+
+    User.findOne({ username }, (err, foundUser) => {
+        if(err){
+            res.status(500).json({ message: 'Username not found.'});
+            return;
+        }
+        if(foundUser){
+            res.status(400).json({ message: 'Username taken. Choose another one'});
+            return;
+        }
+    });
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashPass = bcrypt.hashSync(password, salt);
+
     const newUser = new User({
-        username,
-        email,
-        password, 
-        firstName,
-        lastName, 
-        imgUrl,  
-        age,  
-        gender, 
-        followers       
+        username: username,
+        email: email,
+        password: hashPass, 
+        firstName: firstName,
+        lastName: lastName, 
+        imgUrl: imgUrl,  
+        age: age,  
+        gender: gender, 
+        followers: followers       
     });
 
     newUser.save()
