@@ -9,6 +9,7 @@ import EditPlaylist from './components/edit-playlist.component';
 import AddPlaylist from './components/add-playlist.component';
 import CreateUser from './components/create-user.component';
 import Footer from './components/footer.component';
+import LoginUser from './components/login-user.component';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path= '/edit/:id' component ={EditPlaylist} />
         <Route path= '/add' component ={AddPlaylist} />
         <Route path= '/user' component ={CreateUser} />
+        <Route path= '/login' component ={LoginUser} />
         <br />
         <Footer />
       </div>
