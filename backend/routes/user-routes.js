@@ -1,6 +1,7 @@
-const router = require('express').Router();
-const User = require('../models/user.model');
-const bcrypt = require('bcrypt');
+const router    = require('express').Router();
+const User      = require('../models/user.model');
+const bcrypt    = require('bcrypt');
+const passport  = require('passport');
 
 router.route('/').get((req, res) =>{
     User.find()
@@ -92,5 +93,34 @@ router.route('/update/:id').post((req, res) =>{
     })
     .catch(err => res.status(400).json('Error ' + err));
 });
+
+//---------- Login ----------- 
+User.post('login', (req, res, next)=>{
+    passport.authenticate('local', (err, user, details) =>{
+        if(err) {
+            res
+            .status(500)
+            .json({message: 'Something is went wrong with User'});
+            return
+        }
+        if(!user){
+            res.status(401).json(details);
+            return;
+        }
+
+        //user session
+        req.login(user, err => {
+            if(err) {
+                res.json({message: 'Session save went wrong'});
+                return;
+            }
+
+            req.session.user = 'Working Good'
+            res.status(200).json(user)
+            res.redirect('/add');
+        });
+    })
+});
+
 
 module.exports = router;
