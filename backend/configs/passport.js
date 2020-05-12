@@ -1,34 +1,40 @@
-const LocalStrategy  = require('passport-local').Strategy
-const bcrypt         = require('bcrypt')
+const User           = require('../models/user.model');
+const LocalStrategy  = require('passport-local').Strategy;
+const bcrypt         = require('bcrypt');
+const passport       = require('passport');
 
-function initialize(passport, getUserByEmail, getUserById) {
-    const authenticateUser = async (email, password, done) => {
-        const user = getUserByEmail(email)
-        if(user == null) {
-        return done(null, false, {
-        message: 'No user with that email'
-         })
+passport.serializeUser((userLoggedIn, next) => {
+    next(null, userLoggedIn._id);
+});
+
+passport.deserializeUser((userFromSession, next) => {
+    User.findById(userFromSession, (err, userDocument) =>{
+        if(err){
+            next(err);
+            return;
         }
+        next(null, userDocument);
+    });
+});
 
-        try {
-        if (await bcrypt.compare(password, user.password)){
-            return done(null, user)
-        } else {
-            return done(null, false, {
-                message: 'Password incorrect' })
+passport.use(
+    new LocalStrategy({
+        usernameInput: 'username',
+        passwordInput: 'password'
+    }, (username, password, done) => {
+       User.findById({ username })
+        .then(foundUser => {
+            if(!foundUser) {
+                done(null, false, { message: 'Incorrect User' });
+                return;
+            }
+            if(!bcrypt.compareSync(password, foundUser.password)){
+                done(null, false, { message: 'Incorrect password '});
+                return;
+            }
+            done(null, foundUser);
+        }) 
+        .catch(err => done(err));
         }
-        } catch (e){
-        return done(e)
-        }
-}
-
-    passport.use(new LocalStrategy({ usernameField: 'email'}, 
-    authenticateUser))
-    
-    passport.serializeUser((user, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => { 
-        return done(null, getUserById(id))
-    })
-}    
-
-module.exports = initialize;
+    )
+);

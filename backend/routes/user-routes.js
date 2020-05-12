@@ -95,13 +95,13 @@ router.route('/update/:id').post((req, res) =>{
 });
 
 //---------- Login ----------- 
-User.post('login', (req, res, next)=>{
+router.post('/login', (req, res, next)=>{
     passport.authenticate('local', (err, user, details) =>{
         if(err) {
             res
             .status(500)
             .json({message: 'Something is went wrong with User'});
-            return
+            return;
         }
         if(!user){
             res.status(401).json(details);
@@ -119,8 +119,22 @@ User.post('login', (req, res, next)=>{
             res.status(200).json(user)
             res.redirect('/add');
         });
-    })
+    }) 
 });
 
+//---------- LogOut ----------- 
+router.post('/logout',(req, res, next) => {
+    req.logOut();
+    res.status(200).json({ message: 'Logged out Success' });
+});
+
+//---------- LoggedIn ----------- 
+router.get('/loggedIn',(req, res, next) => {
+  if(req.isAuthenticated()){
+      res.status(200).json(req.user);
+      return;
+  }  
+  res.status(403).json({ message: 'Unauthorized'});
+});
 
 module.exports = router;
