@@ -6,21 +6,18 @@ const mongoose     = require('mongoose');
 const bodyParser   = require('body-parser');
 const cookieParser = require("cookie-parser");
 const passport     = require('passport');
-const flash        = require('express-flash');
 const session      = require('express-session');
 
 const app  = express();
 const port = process.env.PORT || 5000;
 
-app.use(flash())
-
+ 
 require('./configs/passport')
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    })
-);
+    }));
 
 app.use(passport.initialize());
 app.use(passport.session());

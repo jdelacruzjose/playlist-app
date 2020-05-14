@@ -3,38 +3,31 @@ const LocalStrategy  = require('passport-local').Strategy;
 const bcrypt         = require('bcrypt');
 const passport       = require('passport');
 
-passport.serializeUser((userLoggedIn, next) => {
-    next(null, userLoggedIn._id);
+passport.serializeUser((user, cb) => {
+    cb(null, user._id);
 });
 
-passport.deserializeUser((userFromSession, next) => {
-    User.findById(userFromSession, (err, userDocument) =>{
+passport.deserializeUser((id, cb) => {
+    User.findById(id, (err, user) =>{
+        if(err) {return cd(err); }
+        cb(null, user);
+    })
+});
+
+passport.use(new LocalStrategy((username, password, next)=>{
+    User.findOne({ username }, (err, user) => {
         if(err){
-            next(err);
-            return;
+            return next (err);
         }
-        next(null, userDocument);
-    });
-});
+        if(!user){
+            return next(null, false, {message: 'Incorrect Username '});
+        }
+        if(!bcrypt.compareSync(password, user.password)){
+            return next(null, false, {message: 'Incorrect Password'});
+        }
 
-passport.use(
-    new LocalStrategy({
-        usernameInput: 'username',
-        passwordInput: 'password'
-    }, (username, password, done) => {
-       User.findById({ username })
-        .then(foundUser => {
-            if(!foundUser) {
-                done(null, false, { message: 'Incorrect User' });
-                return;
-            }
-            if(!bcrypt.compareSync(password, foundUser.password)){
-                done(null, false, { message: 'Incorrect password '});
-                return;
-            }
-            done(null, foundUser);
-        }) 
-        .catch(err => done(err));
-        }
-    )
-);
+        return next(null, user);
+    });
+}));
+
+ 

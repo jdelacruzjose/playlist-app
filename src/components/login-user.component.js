@@ -10,31 +10,28 @@ export default class LoginUser extends Component {
 
         this.state = {
             username: '',
-            password: ''
-        };
+            password: '' };
         this.service = new AuthService();
     }
 
-    onSubmit(e){
+    onSubmit = (e) => {
         e.preventDefault();
-
-        const user = {
-            username: this.state.username,
-            password: this.state.password
-        };
+        const username = this.state.username;
+        const password = this.state.password
 
         this.service
-            .login(user)
+            .login(username, password)
             .then(response => {
+                console.log("WE LOGGED IN AND HERES THE USER ", response);
                 this.setState({
                     username:'',
-                    password:''
-                });
+                    password:'' });
                 this.props.getUser(response);
-                window.location = '/add'
+
+                // window.location = '/add'
             })
             .catch(error => console.log(error));
-    }
+          };
 
     handleChange(e){
         const {name, value} = e.target;
