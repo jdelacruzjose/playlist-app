@@ -95,29 +95,32 @@ router.route('/update/:id').post((req, res) =>{
 });
 
 //---------- Login ----------- 
-router.post('/login', (req, res, next)=>{
-    passport.authenticate('local', (err, theUser, failureDetails) =>{
-        if(err) {
-            res
-            .status(500).json({message: 'Something is went wrong with User'});
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, theUser, failureDetails) => {
+        if (err) {
+            res.status(500).json({ message: 'Something went wrong authenticating user' });
             return;
         }
-        if(!theUser){
+    
+        if (!theUser) {
+            // "failureDetails" contains the error messages
+            // from our logic in "LocalStrategy" { message: '...' }.
             res.status(401).json(failureDetails);
             return;
         }
 
-        //user session
-        req.login(theUser, err => {
-            if(err) {
-                res.json({message: 'Session save went wrong'});
+        // save user in session
+        req.login(theUser, (err) => {
+            if (err) {
+                res.status(500).json({ message: 'Session save went bad.' });
                 return;
             }
 
-            req.session.user = 'Working Good'
-            res.status(200).json(theUser)
+            // We are now logged in (that's why we can also send req.user)
+            res.status(200).json(theUser);
         });
-    }) 
+        console.log('Got User!');
+    })(req, res, next);
 });
 
 //---------- LogOut ----------- 

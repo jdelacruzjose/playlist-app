@@ -5,7 +5,7 @@ export default class LoginUser extends Component {
     constructor(props) {
         super(props);
 
-        this.onSubmit = this.onSubmit.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
@@ -14,24 +14,22 @@ export default class LoginUser extends Component {
         this.service = new AuthService();
     }
 
-    onSubmit = (e) => {
-        e.preventDefault();
-        const username = this.state.username;
-        const password = this.state.password
-
-        this.service
-            .login(username, password)
-            .then(response => {
-                console.log("WE LOGGED IN AND HERES THE USER ", response);
-                this.setState({
-                    username:'',
-                    password:'' });
-                this.props.getUser(response);
-
-                // window.location = '/add'
-            })
-            .catch(error => console.log(error));
-          };
+    handleFormSubmit = event => {
+      event.preventDefault();
+      const username = this.state.username;
+      const password = this.state.password;
+      this.service
+        .login(username, password)
+        .then(response => {
+          console.log("WE LOGGED IN AND HERES THE USER ", response);
+          this.setState({ username: "", password: "" });
+          this.props.getUser(response);
+  
+          window.location = '/add';
+  
+        })
+        .catch(error => console.log(error));
+    };
 
     handleChange(e){
         const {name, value} = e.target;
@@ -43,7 +41,7 @@ export default class LoginUser extends Component {
             <div>
             <div>  
               <div>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.handleFormSubmit}>
                   <p>Username:</p>
                   <input
                     type= "text"
